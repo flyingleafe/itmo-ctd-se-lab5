@@ -26,16 +26,12 @@ public class EdgeListGraph extends Graph {
     private List<Edge> edgeList;
     private int n;
 
-    private void calcN() {
+    public EdgeListGraph(List<Edge> edgeList) {
+        this.edgeList = edgeList;
         n = 0;
         for (Edge e : edgeList) {
             n = Math.max(n, Math.max(e.a, e.b));
         }
-    }
-
-    public EdgeListGraph(List<Edge> edgeList) {
-        this.edgeList = edgeList;
-        calcN();
     }
 
     public EdgeListGraph(InputStream in) {
@@ -58,11 +54,16 @@ public class EdgeListGraph extends Graph {
     @Override
     public void readGraph(InputStream source) {
         Scanner sc = new Scanner(source);
+        n = sc.nextInt();
         int m = sc.nextInt();
         edgeList.clear();
         for (int i = 0; i < m; i++) {
-            edgeList.add(new Edge(sc.nextInt(), sc.nextInt()));
+            int a = sc.nextInt();
+            int b = sc.nextInt();
+            if (a >= n || b >= n) {
+                throw new RuntimeException("Invalid vertex of edge");
+            }
+            edgeList.add(new Edge(a, b));
         }
-        calcN();
     }
 }
